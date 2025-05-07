@@ -60,7 +60,10 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f k8s/'
+                 sh '''
+                    kubectl delete -f k8s/ --ignore-not-found=true
+                    kubectl apply -f k8s/
+                '''
             }
         }
     }
