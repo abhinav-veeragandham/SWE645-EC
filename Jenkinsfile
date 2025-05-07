@@ -24,22 +24,24 @@ pipeline {
         }
 
         stage('Build Backend') {
-            dir('backend') {
-                steps {
+            steps {
+                dir('backend') {
                     script {
                         sh 'chmod +x mvnw'
                         sh './mvnw clean package -DskipTests'
-                        sh 'docker build -t $BACKEND_IMAGE .'
+                        sh "docker build -t $BACKEND_IMAGE ."
                     }
                 }
             }
         }
 
         stage('Build Frontend') {
-            dir('frontend') {
-                steps {
-                    sh 'python3 manage.py collectstatic --noinput || true'
-                    sh 'docker build -t $FRONTEND_IMAGE .'
+            steps {
+                dir('frontend') {
+                    script {
+                        sh 'python3 manage.py collectstatic --noinput || true'
+                        sh "docker build -t $FRONTEND_IMAGE ."
+                    }
                 }
             }
         }
@@ -47,19 +49,16 @@ pipeline {
         stage('Push Docker Images') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh """
+                    sh '''
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
                         docker push $BACKEND_IMAGE
                         docker push $FRONTEND_IMAGE
-                    """
+                    '''
                 }
             }
         }
 
         stage('Deploy to Kubernetes') {
-            when {
-                expression { fileExists('k8s/deployment.yaml') }
-            }
             steps {
                 sh 'kubectl apply -f k8s/'
             }
@@ -75,3 +74,4 @@ pipeline {
         }
     }
 }
+
