@@ -60,8 +60,7 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f swe645-backend.yaml'
-                sh 'kubectl apply -f swe645-frontend.yaml'
+                sh 'kubectl apply -f k8s/'
             }
         }
     }
