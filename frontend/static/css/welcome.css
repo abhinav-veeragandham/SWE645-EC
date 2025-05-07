@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css?family=Anonymous+Pro');
+
+.typewriter-wrapper {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: #385170;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #9fd3c7;
+}
+
+.welcome-content {
+  text-align: center;
+}
+
+.cursor {
+  position: relative;
+  width: 100%;
+  margin: 0 auto 2em;
+  border-right: 2px solid rgba(255,255,255,.75);
+  font-size: 30px;
+  white-space: nowrap;
+  overflow: hidden;
+  font-family: 'Anonymous Pro', monospace;
+}
+
+.typewriter-animation {
+  animation:
+    typewriter 2.5s steps(30) 0.5s 1 normal both,
+    blinkingCursor 500ms steps(30) infinite normal;
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blinkingCursor {
+  from { border-right-color: rgba(255,255,255,.75); }
+  to { border-right-color: transparent; }
+}
+
+.button-group {
+  margin-top: 20px;
+}
+
+.nav-button {
+  margin: 0 10px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-family: 'Trebuchet MS', sans-serif;
+  background-color: #9fd3c7;
+  border: none;
+  color: #142d4c;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: #f1f1f1;
+  color: #385170;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+  animation-delay: 0.2s;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

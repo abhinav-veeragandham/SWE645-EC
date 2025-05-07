@@ -1,0 +1,107 @@
+{#Team Members#}
+{#Abhinav Veeragandham - G01515455#}
+{#Pranav Vangavety - G01511443#}
+{#Charan Sri Sai Devalla - G01504177#}
+{#Bhogeswara Pathakamudi - G01507114#}
+{#Durga Shankar Kondaveeti - G01510533#}
+
+{#This file renders student survey form.#}
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Survey Form</title>
+    <link rel="stylesheet" href="{% static 'css/survey_form.css' %}">
+    <link rel="stylesheet" href="{% static 'global.css' %}">
+</head>
+
+<body>
+    {% if messages %}
+      <script>
+        {% for message in messages %}
+          alert("{{ message }}");
+        {% endfor %}
+      </script>
+    {% endif %}
+
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="nav-links">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/surveys/" class="nav-link">View All Surveys</a>
+        </div>
+      </div>
+    </nav>
+    <br>
+    <h1 style=text-align:center>Student Survey Form</h1>
+    <div class="container">
+    <form method="post">
+        {% csrf_token %}
+        <label>First Name:</label><input type="text" name="firstName" required><br>
+        <label>Last Name:</label><input type="text" name="lastName" required><br>
+        <label>Street:</label><input type="text" name="street" required><br>
+        <label>Zip:</label>
+        <input type="text" name="zip" value="{{ survey.zip }}" onblur="fetchCityState()" required><br>
+        <label>City:</label><input type="text" name="city" required><br>
+        <label>State:</label><input type="text" name="state" required><br>
+        <label>Phone:</label><input type="text" name="phone" required><br>
+        <label>Email:</label><input type="email" name="email" required><br>
+        <label>Date of Survey:</label><input type="date" name="surveyDate" required><br>
+
+        <p>What did you like most about the campus?</p>
+        {% for item in liked_options %}
+            <label>
+                <input type="checkbox" name="likedMost" value="{{ item }}"
+                {% if item in survey.likedMost %}checked{% endif %}>
+                {{ item|capfirst }}
+            </label><br>
+        {% endfor %}
+
+        <p>How did you hear about us?</p>
+        {% for source in sources %}
+            <label>
+                <input type="radio" name="interestSource" value="{{ source }}"> {{ source|capfirst }}
+            </label><br>
+        {% endfor %}
+
+        <label>Recommendation:</label><br>
+        <select name="recommendation" required>
+            <option value="" disabled selected>Select an option</option>
+            {% for option in recommendation_options %}
+                <option value="{{ option }}">
+                    {{ option }}
+                </option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label>Comments:</label><br>
+        <textarea name="comments" rows="5" cols="30"></textarea><br><br>
+
+        <button type="submit">Submit</button>
+        <button type="reset">Cancel</button>
+    </form>
+    </div>
+    <script>
+            function fetchCityState() {
+            const zip = document.querySelector('input[name="zip"]').value;
+            if (zip.length === 5) {
+                fetch(`https://api.zippopotam.us/us/${zip}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error("Invalid ZIP");
+                        return response.json();
+                    })
+                    .then(data => {
+                        const place = data.places[0];
+                        document.querySelector('input[name="city"]').value = place["place name"];
+                        document.querySelector('input[name="state"]').value = place["state abbreviation"];
+                    })
+                    .catch(err => {
+                        console.warn("Could not fetch location: ", err);
+                    });
+                }
+            }
+        </script>
+</body>
+</html>

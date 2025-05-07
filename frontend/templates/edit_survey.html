@@ -1,0 +1,112 @@
+{#Team Members#}
+{#Abhinav Veeragandham - G01515455#}
+{#Pranav Vangavety - G01511443#}
+{#Charan Sri Sai Devalla - G01504177#}
+{#Bhogeswara Pathakamudi - G01507114#}
+{#Durga Shankar Kondaveeti - G01510533#}
+
+{#This file renders editing of survey response.#}
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Survey</title>
+    <link rel="stylesheet" href="{% static 'css/survey_form.css' %}">
+    <link rel="stylesheet" href="{% static 'global.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="nav-links">
+          <a href="/" class="nav-link">Home</a>
+          <a href="all_surveys/" class="nav-link">View All Surveys</a>
+        </div>
+      </div>
+    </nav>
+    <br>
+    <h1 style=text-align:center>Edit Survey Form</h1>
+    <div class="container">
+        <form method="post">
+        {% csrf_token %}
+        <label>First Name:</label><input type="text" name="firstName" value="{{ survey.firstName }}" required><br>
+        <label>Last Name:</label><input type="text" name="lastName" value="{{ survey.lastName }}" required><br>
+        <label>Street:</label><input type="text" name="street" value="{{ survey.street }}" required><br>
+        <label>Zip:</label>
+        <input type="text" name="zip" value="{{ survey.zip }}" onblur="fetchCityState()" required><br>
+        <label>City:</label><input type="text" name="city" value="{{ survey.city }}" required><br>
+        <label>State:</label><input type="text" name="state" value="{{ survey.state }}" required><br>
+        <label>Phone:</label><input type="text" name="phone" value="{{ survey.phone }}" required><br>
+        <label>Email:</label><input type="email" name="email" value="{{ survey.email }}" required><br>
+        <label>Date of Survey:</label><input type="date" name="surveyDate" value="{{ survey.surveyDate }}" required><br>
+
+        <p>What did you like most about the campus?</p>
+        {% for item in liked_options %}
+        <label>
+            <input type="checkbox" name="likedMost" value="{{ item }}"
+                   {% if item in selected_liked %}checked{% endif %}>
+                   {{ item|capfirst }}
+        </label><br>
+        {% endfor %}
+
+        <p>How did you hear about us?</p>
+        {% for source in sources %}
+            <label>
+                <input type="radio" name="interestSource" value="{{ source }}"
+                       {% if source == survey.interestSource %}checked{% endif %}> {{ source|capfirst }}
+            </label><br>
+        {% endfor %}
+
+        <label>Recommendation:</label>
+        <select name="recommendation">
+            {% for option in recommendation_options %}
+                <option value="{{ option }}"
+                    {% if survey.recommendation == option %} selected {% endif %}>
+                    {{ option }}
+                </option>
+            {% endfor %}
+        </select><br><br>
+
+
+        <label>Comments:</label><br>
+        <textarea name="comments" rows="5" cols="30">{{ survey.comments }}</textarea><br><br>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+            <button type="submit" style="width: 100%;">Update</button>
+            <a href="{% url 'all_surveys' %}" style="width: 100%;">
+            <button type="button" style="width: 100%;">Cancel</button>
+            </a>
+        </div>
+
+    </form>
+    </div>
+    <script>
+            function fetchCityState() {
+            const zip = document.querySelector('input[name="zip"]').value;
+            if (zip.length === 5) {
+                fetch(`https://api.zippopotam.us/us/${zip}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error("Invalid ZIP");
+                        return response.json();
+                    })
+                    .then(data => {
+                        const place = data.places[0];
+                        document.querySelector('input[name="city"]').value = place["place name"];
+                        document.querySelector('input[name="state"]').value = place["state abbreviation"];
+                    })
+                    .catch(err => {
+                        console.warn("Could not fetch location: ", err);
+                    });
+                }
+            }
+    </script>
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('updated') === 'true') {
+                    alert("Form updated successfully!");
+                }
+            });
+        </script>
+</body>
+</html>

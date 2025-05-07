@@ -1,0 +1,120 @@
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+/* Box sizing reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Form Structure */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+body {
+  background-color: #f5f5f5;
+  padding: 30px;
+}
+
+
+/* Input + Select + Textarea */
+input, select, textarea {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-family: 'Trebuchet MS', sans-serif;
+  transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #385170;
+  outline: none;
+}
+
+.row-group {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.row-group input {
+  flex: 1;
+  min-width: 100px;
+}
+
+/* Labels (if you use them) */
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Validation */
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border-color: #e74c3c;
+  background-color: #fff8f8;
+}
+
+/* Checkbox and Radio Labels */
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: 8px;
+}
+
+/* Section Heading */
+.section-title {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #142d4c;
+  font-weight: bold;
+}
+
+/* Submit Button */
+button {
+  padding: 12px 24px;
+  font-size: 16px;
+  background-color: #385170;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Trebuchet MS', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #142d4c;
+}
+
+button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.checkbox-group, .radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+form button {
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+}
